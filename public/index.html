@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MongoDB Admin Paneli</title>
+    <style>
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+h1 {
+    background: linear-gradient(to right, #ff6b6b, #4ecdc4);
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 30px;
+}
+
+.product-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    margin-bottom: 30px;
+    backdrop-filter: blur(5px);
+}
+
+.product-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #4ecdc4;
+    border-bottom: 3px solid #4ecdc4;
+    padding-bottom: 10px;
+}
+
+.product {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    border: 2px solid #4ecdc4;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #f9d5e5, #ffffff);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product h3 {
+    font-size: 20px;
+    margin: 0;
+    color: #2c3e50;
+}
+
+.product img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.product p {
+    font-size: 16px;
+    color: #34495e;
+    font-weight: bold;
+}
+
+.form-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    border: 2px solid #4ecdc4;
+    backdrop-filter: blur(5px);
+}
+
+.form-container h2 {
+    font-size: 24px;
+    color: #4ecdc4;
+    margin-bottom: 30px;
+    text-align: center;
+    border-bottom: 3px solid #4ecdc4;
+    padding-bottom: 10px;
+}
+
+.form-container label {
+    font-size: 16px;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: bold;
+}
+
+.form-container input[type="text"],
+.form-container input[type="number"],
+.form-container input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 2px solid #4ecdc4;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.form-container input[type="text"]:focus,
+.form-container input[type="number"]:focus,
+.form-container input[type="file"]:focus {
+    border-color: #ff6b6b;
+    outline: none;
+    box-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
+}
+
+.form-container button {
+    background: linear-gradient(to right, #4ecdc4, #45b7d1);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.form-container button:hover {
+    background: linear-gradient(to right, #45b7d1, #4ecdc4);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product button {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.product button:hover {
+    background-color: #ee5253;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+
+    .product {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .product img {
+        max-width: 200px;
+        margin-top: 15px;
+    }
+}
+    </style>
+</head>
+<body>
+    <h1>MongoDB Ürün Yönetim  Paneli</h1>
+    
+
+    <div class="container">
+
+        <!-- Ürün Ekleme Formu -->
+        <div class="form-container">
+            <h2>Yeni Ürün Ekle</h2>
+            <form id="add-product-form" enctype="multipart/form-data">
+                <label for="product_name">Ürün Adı</label>
+                <input type="text" id="product_name" name="product_name" required><br>
+
+                <label for="product_price">Ürün Fiyatı</label>
+                <input type="number" id="product_price" name="product_price" required><br>
+
+                <label for="product_image">Ürün Resmi</label>
+                <input type="file" id="product_image" name="product_image"><br>
+
+                <button type="submit">Ürün Ekle</button>
+            </form>
+        </div>
+            <!-- Ürün Listeleme -->
+            <div class="product-container">
+                <h2>Ürün Listesi</h2>
+                <div id="product-list"></div> <!-- Dinamik ürünler burada listelenecek -->
+            </div>
+    </div>
+
+    <script>
+                
+        // Yeni eklenen ürünü tabloya eklemek
+        async function addProductToDatabase(product) {
+            const formData = new FormData();
+            formData.append('product_name', product.product_name);
+            formData.append('product_price', product.product_price);
+            formData.append('product_image', product.product_image);
+        
+            try {
+                const response = await fetch('/urunler', {
+                    method: 'POST',
+                    body: formData,
+                });
+        
+                if (response.ok) {
+                    const newProduct = await response.json();
+                    fetchProducts(); // Ürün listesi güncelleniyor
+                    alert('Ürün eklendi');
+                } else {
+                    alert('Ürün eklenirken bir hata oluştu.');
+                }
+            } catch (error) {
+                console.error('Veri gönderilirken bir hata oluştu:', error);
+                alert('Veri gönderilirken bir hata oluştu.');
+            }
+        }
+ 
+     
+        // Ürünleri listelemek için API'den veri alıyoruz
+        async function fetchProducts() {
+            try {
+                const response = await fetch('/urunler');
+                const products = await response.json();
+        
+                const productList = document.getElementById('product-list');
+                productList.innerHTML = ''; // Mevcut veriyi temizle
+        
+                products.forEach(product => {
+                    const productElement = document.createElement('div');
+                    productElement.classList.add('product');
+                    productElement.innerHTML = `
+                        <div>
+                            <h3>${product.product_name}</h3>
+                            <p><strong>Fiyat:</strong> ${product.product_price}₺</p>
+                        </div>
+                        <div><img src="/uploads/${product.product_image}" alt="${product.product_name}"></div>
+                    `;
+                    productList.appendChild(productElement);
+                });
+            } catch (error) {
+                console.error('Ürünler alınırken bir hata oluştu.', error);
+            }
+        }
+
+        async function fetchProducts() {
+    try {
+        const response = await fetch('/urunler');
+        const products = await response.json();
+
+        const productList = document.getElementById('product-list');
+        productList.innerHTML = ''; // Mevcut veriyi temizle
+
+        products.forEach(product => {
+            const productElement = document.createElement('div');
+            productElement.classList.add('product');
+            productElement.innerHTML = `
+                <div>
+                    <h3>${product.product_name}</h3>
+                    <p><strong>Fiyat:</strong> ${product.product_price}₺</p>
+                </div>
+                <div><img src="/uploads/${product.product_image}" alt="${product.product_name}"></div>
+                <button onclick="deleteProduct('${product._id}')">Ürünü Sil</button>
+            `;
+            productList.appendChild(productElement);
+        });
+    } catch (error) {
+        console.error('Ürünler alınırken bir hata oluştu.', error);
+    }
+}
+async function deleteProduct(productId) {
+    try {
+        const response = await fetch(`/urunler/${productId}`, {
+            method: 'DELETE'
+        });
+        if (response.ok) {
+            alert('Ürün başarıyla silindi');
+            fetchProducts(); // Ürün listesini güncelle
+        } else {
+            const errorResponse = await response.json();
+            alert(`Ürün silinirken bir hata oluştu: ${errorResponse.error}`);
+        }
+    } catch (error) {
+        console.error('Ürün silinirken bir hata oluştu:', error);
+        alert('Ürün silinirken bir hata oluştu.');
+    }
+}
+
+        // Ürün ekleme formunu işleyelim
+        document.getElementById('add-product-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+        
+            const product_name = document.getElementById('product_name').value;
+            const product_price = document.getElementById('product_price').value;
+            const product_image = document.getElementById('product_image').files[0];
+        
+            const product = {
+                product_name,
+                product_price,
+                product_image,
+            };
+        
+            console.log("Form verileri:", product);
+            await addProductToDatabase(product);
+            document.getElementById('add-product-form').reset(); // Formu sıfırla
+        });
+        
+        // Sayfa yüklendiğinde ürünleri listele
+        window.onload = fetchProducts;
+        </script>
+         </body>
+</html>
